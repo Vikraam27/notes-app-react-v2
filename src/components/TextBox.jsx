@@ -79,7 +79,7 @@ function TextBox({ value, handleChange, defaultValue }) {
       <ReactQuill
         value={value}
         onChange={(val) => handleChange('body', val)}
-        placeholder="body"
+        placeholder=""
         modules={modules}
         formats={formats}
         className="box"

@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 
 import NoteItems from './NoteItems';
 import colors from '../utils/color';
+import AppContext from '../context/AppContext';
 
 function NoteLists({ data }) {
+  const { lang } = useContext(AppContext);
   let index = 0;
   if (data.length === 0) {
-    return <p className="not-found">Notes Not found</p>;
+    return <p className="not-found">{lang === 'id' ? 'Note Tidak ditemukan' : 'Notes Not found'}</p>;
   }
   return (
     <div className="note_container">
@@ -20,11 +22,9 @@ function NoteLists({ data }) {
             id={item.id}
             body={item.body}
             createdAt={item.createdAt}
-            tag={item.tag}
             title={item.title}
             key={item.id}
             cardColor={colors[index].main}
-            tagColor={colors[index].secondary}
           />
         );
 

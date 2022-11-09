@@ -1,18 +1,14 @@
 import React from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import autoBind from 'auto-bind';
 
 import Nav from '../components/Nav';
 import HomePage from './HomePage';
 import NoteDetails from './NoteDetails';
 
-import {
-  getArchivedNotes, getAllNotes, getActiveNotes,
-  addNote, setIsarchiveNote, deleteNote, editNote, getNote,
-} from '../utils/local-data';
 import '../styles/main.css';
 import NewNotesPages from './NewNotesPages';
-import EditNote from './EditNote';
+import FetchAPI from '../utils/API';
 
 class App extends React.Component {
   constructor(props) {
@@ -20,13 +16,20 @@ class App extends React.Component {
 
     this.state = {
       query: '',
-      notes: getAllNotes(),
+      notes: [],
+      archiveNote: [],
       title: '',
       body: '',
-      tag: '',
+      initialize: true,
     };
 
     autoBind(this);
+  }
+
+  async componentDidMount() {
+    await this.getAllActiveNotes();
+    await this.getAllArchiveNote();
+    this.onChangeHandler('initialize', false);
   }
 
   onChangeHandler(key, value) {
@@ -35,13 +38,15 @@ class App extends React.Component {
     }));
   }
 
-  onAddNote() {
-    const { title, body, tag } = this.state;
-    addNote({ title, body, tag });
+  async onAddNote() {
+    const { title, body } = this.state;
+    const { error } = await FetchAPI.addNote({ title, body });
+    if (error) {
+      alert(error);
+    }
     this.onChangeHandler('title', '');
     this.onChangeHandler('body', '');
-    this.onChangeHandler('tag', '');
-    this.onChangeHandler('notes', getAllNotes());
+    await this.getAllActiveNotes();
   }
 
   onSearchHandler(data) {
@@ -57,38 +62,65 @@ class App extends React.Component {
     });
   }
 
-  onClickArchive(id) {
-    setIsarchiveNote(id);
-    this.onChangeHandler('notes', getAllNotes());
+  async onClickArchive(id) {
+    const { error } = await FetchAPI.archiveNote(id);
+    if (error) {
+      return error;
+    }
+    this.getAllActiveNotes();
+    await this.getAllArchiveNote();
+    return null;
   }
 
-  onDeleteNote(id) {
-    deleteNote(id);
-    this.onChangeHandler('notes', getAllNotes());
+  async onClickUnArchive(id) {
+    const { error } = await FetchAPI.unarchiveNote(id);
+    if (error) {
+      return error;
+    }
+    this.getAllActiveNotes();
+    await this.getAllArchiveNote();
+    return error;
   }
 
-  onOpenEditPage(id) {
-    const note = getNote(id);
-    this.onChangeHandler('title', note.title);
-    this.onChangeHandler('body', note.body);
-    this.onChangeHandler('tag', note.tag);
+  async onDeleteNote(id) {
+    const { error, message } = await FetchAPI.deleteNote(id);
+    if (error) {
+      return { error, message };
+    }
+    this.getAllActiveNotes();
+    await this.getAllArchiveNote();
+    return { error, message };
   }
 
-  onEditNote({
-    id, title, body, tag,
-  }) {
-    editNote({
-      id, title, body, tag,
-    });
-    this.onChangeHandler('notes', getAllNotes());
+  async getAllArchiveNote() {
+    const { error, data } = await FetchAPI.getArchivedNotes();
+    if (error) {
+      alert(error);
+    }
+    this.onChangeHandler('archiveNote', data);
+  }
+
+  async getAllActiveNotes() {
+    const { error, data } = await FetchAPI.getActiveNotes();
+    if (error) {
+      alert(error);
+    }
+    this.onChangeHandler('notes', data);
   }
 
   render() {
     const {
-      notes, query, body, tag, title,
+      notes, query, body, title, archiveNote, initialize,
     } = this.state;
+    if (initialize) {
+      return (
+        <div className="loader__container">
+          <span className="loader" />
+        </div>
+      );
+    }
     return (
-      <BrowserRouter>
+      <>
         <Nav />
         <Routes>
           <Route
@@ -106,17 +138,7 @@ class App extends React.Component {
             path="/archived"
             element={(
               <HomePage
-                notes={this.onSearchHandler(getArchivedNotes(notes))}
-                query={query}
-                onChangeHandler={this.onChangeHandler}
-              />
-            )}
-          />
-          <Route
-            path="/unarchived"
-            element={(
-              <HomePage
-                notes={this.onSearchHandler(getActiveNotes(notes))}
+                notes={this.onSearchHandler(archiveNote)}
                 query={query}
                 onChangeHandler={this.onChangeHandler}
               />
@@ -128,7 +150,6 @@ class App extends React.Component {
               <NewNotesPages
                 title={title}
                 body={body}
-                tag={tag}
                 onChangeHandler={this.onChangeHandler}
                 onClickHandler={this.onAddNote}
               />
@@ -138,27 +159,15 @@ class App extends React.Component {
             path="/note/:id"
             element={(
               <NoteDetails
-                onClickArchive={this.onClickArchive}
                 onDeleteNote={this.onDeleteNote}
-                onOpenEditPage={this.onOpenEditPage}
-              />
-            )}
-          />
-          <Route
-            path="/edit-note/:id"
-            element={(
-              <EditNote
-                onEditNote={this.onEditNote}
-                onChangeHandler={this.onChangeHandler}
-                title={title}
-                body={body}
-                tag={tag}
+                onClickArchive={this.onClickArchive}
+                onClickUnArchive={this.onClickUnArchive}
               />
             )}
           />
           <Route path="*" element={<h1 className="not-found">Page not found</h1>} />
         </Routes>
-      </BrowserRouter>
+      </>
     );
   }
 }

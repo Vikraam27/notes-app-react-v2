@@ -4,6 +4,17 @@
   --white: #ffffff;
   --black: #111111;
   --primary-color: #270082;
+  --background-color: #fff;
+  --font-white: #fff;
+  --font-black: #333;
+  --font-placeholder: gray;
+}
+
+[data-theme='dark'] {
+  --font-color: #eee;
+  --background-color: #333;
+  --font-black: #fff;
+  --font-placeholder: rgb(237, 237, 237);
 }
 * {
   margin: 0;
@@ -11,7 +22,11 @@
   box-sizing: border-box;
   font-family: "Open Sans", sans-serif;
 }
-
+main {
+  min-height: 100vh;
+  padding-top: 10px;
+  background-color: var(--background-color);
+}
 /*
  * Header
  *
@@ -27,14 +42,14 @@
   justify-content: space-between;
   align-items: center;
   transition: 0.5s;
-  background: var(--white);
+  background: var(--background-color);
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
 }
 .menu-toggle {
   display: none;
 }
 header > .logo {
-  color: var(--black);
+  color: var(--font-black);
   font-weight: 700;
   font-size: 2em;
   text-decoration: none;
@@ -57,7 +72,7 @@ header > .navigation li {
 header > .navigation li a {
   text-decoration: none;
   font-weight: 300;
-  color: var(--black);
+  color: var(--font-black);
   display: inline-block;
   min-width: 44px;
   min-height: 44px;
@@ -134,8 +149,12 @@ header > .navigation li a:hover {
   font-weight: bold;
   text-align: center;
   margin-top: 30px;
+  color: var(--font-black);
 }
 /*search*/
+.search-form {
+  background-color: var(--background-color);
+}
 .search {
   width: 100%;
   margin-top:  20px;
@@ -143,6 +162,7 @@ header > .navigation li a:hover {
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: var(--background-color);
 }
 
 .searchTerm {
@@ -153,7 +173,11 @@ header > .navigation li a:hover {
   height: 36px;
   border-radius: 5px 0 0 5px;
   outline: none;
-  
+  color: var(--font-black);
+  background-color: var(--background-color);
+}
+.searchTerm::placeholder {
+  color: var(--font-placeholder);
 }
 
 .searchButton {
@@ -208,24 +232,196 @@ header > .navigation li a:hover {
 }
 .note_details {
   padding: 30px;
+  background-color: var(--background-color);
+  min-height: 100vh;
+  color: var(--font-black);
 }
 .note_details_header {
   display: flex;
   justify-content: space-between;
+  color: var(--font-black);
 }
 
-.note_details > h4 {
-  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-  padding: 6px 15px;
-  width: 100px;
-  text-align: center;
-  border-radius: 6px;
-  color: #fff;
-  font-weight: 500;
-  background-color: #00B4CC;
-  margin: 10px 0;
- 
+/*
+*Sign in page
+*
+*/
+
+.container {
+  min-height: 95vh;
+  width: 40vw;
+  margin: 20px auto;
+  border-radius: 20px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  background-color: #1D1C25;
+  padding: 20px;
 }
+h1.logo-title {
+  text-align: center;
+  font-size: 40px;
+  padding-top: 40px;
+  font-weight: 700;
+  margin-bottom: 50px;
+  color: white;
+}
+.second_title {
+  color: #fff;
+  font-size: 40px;
+  font-weight: bold;
+  font-family: "Open Sans", sans-serif;
+}
+.description_form {
+  color: gray;
+  font-size: 18px;
+  margin: 10px 0;
+}
+h1.logo-title > span {
+  margin-left: 4px;
+  color: #73c7ff;
+}
+
+/*
+    * button
+    *
+ */
+.btn_custom {
+  height: 55px;
+  width: 100%;
+  background-color: #5D5FEE;
+  margin: 20px 0;
+  justify-content: center;
+  align-items: center;
+}
+.btn_name {
+  color: #fff;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.form_text {
+  text-align: center;
+  color: var(--white);
+}
+
+.form_text > a {
+  color: #00B4CC;
+}
+/*
+    * input
+    *
+ */
+
+.input_container {
+  margin-bottom: 20px;
+}
+.input_label {
+  margin-left: 5px;
+  font-size: 17px;
+  color: white;
+  font-weight: 500;
+}
+.input_wrapper {
+  height: 55px;
+  background-color: #312B46;
+  display: flex;
+  flex-direction: row;
+  padding: 15px 0;
+  border: 0.1px solid var(--white);
+  align-items: center;
+  margin-top: 4px;
+}
+.input_icons {
+  color: #fff;
+  font-size: 22px;
+  margin: 0 10px;
+}
+.input_wrapper > input {
+  display: flex;
+  flex: 1;
+  height: 40px;
+  font-size: 16px;
+  margin-right: 10px;
+  background-color: transparent;
+  border: none;
+  color: #fff;
+}
+.input_error {
+  margin-top: 7px;
+  color: red;
+  font-size: 12px;
+}
+
+
+/*
+* Toast
+*
+*/
+
+#snackbar {
+  visibility: hidden; /* Hidden by default. Visible on click */
+  min-width: 250px; /* Set a default minimum width */
+  margin-left: -125px; /* Divide value of min-width by 2 */
+  background-color: #333; /* Black background color */
+  color: #fff; /* White text color */
+  text-align: center; /* Centered text */
+  border-radius: 2px; /* Rounded borders */
+  padding: 16px; /* Padding */
+  position: fixed; /* Sit on top of the screen */
+  z-index: 1; /* Add a z-index if needed */
+  left: 50%; /* Center the snackbar */
+  bottom: 30px; /* 30px from the bottom */
+}
+
+#snackbar.show {
+  visibility: visible; /* Show the snackbar */
+  /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+  However, delay the fade out process for 2.5 seconds */
+  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+@-webkit-keyframes fadein {
+  from {bottom: 0; opacity: 0;}
+  to {bottom: 30px; opacity: 1;}
+}
+
+@keyframes fadein {
+  from {bottom: 0; opacity: 0;}
+  to {bottom: 30px; opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+  from {bottom: 30px; opacity: 1;}
+  to {bottom: 0; opacity: 0;}
+}
+
+@keyframes fadeout {
+  from {bottom: 30px; opacity: 1;}
+  to {bottom: 0; opacity: 0;}
+}
+.loader__container {
+  display: flex;
+  justify-content: center;
+  margin-top: 50vh;
+}
+.loader {
+  width: 48px;
+  height: 48px;
+  border: 5px solid var(--black);
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+@keyframes rotation {
+0% {
+    transform: rotate(0deg);
+}
+100% {
+    transform: rotate(360deg);
+}
+} 
 @media screen and (max-width: 900px) {
     /*
     * Header
@@ -248,13 +444,13 @@ header > .navigation li a:hover {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    background: var(--white);
+    background: var(--background-color);
   }
   header > .navigation li {
     margin-left: 0;
   }
   header > .navigation li a {
-    color: var(--black);
+    color: var(--font-black);
     font-size: 1.6rem;
   }
   .menu-toggle {
@@ -283,5 +479,13 @@ header > .navigation li a:hover {
   }
   .searchTerm {
     width: 80%;
+  }
+
+  .container {
+    width: 100%;
+    border-radius: 0;
+    min-height: 100vh;
+    margin: 0;
+    box-shadow: none;
   }
 }
