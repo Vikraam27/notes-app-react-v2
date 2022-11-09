@@ -6,13 +6,12 @@ import { Link } from 'react-router-dom';
 import { showFormattedDate, showFromattedTime } from '../utils';
 
 function NoteItems({
-  id, title, body, createdAt, tag, cardColor, tagColor,
+  id, title, body, createdAt, cardColor,
 }) {
   return (
     <div key={id} style={{ backgroundColor: cardColor }} className="note">
       <div className="note_header">
         <h3 className="note_header_title"><Link className="link_id" to={`/note/${id}`}>{title}</Link></h3>
-        <p className="note_header_tag" style={{ backgroundColor: tagColor }}>{tag}</p>
       </div>
       <div className="note_body">
         <p className="note_body_text">
@@ -32,9 +31,7 @@ NoteItems.propTypes = {
   title: PropTypes.string.isRequired,
   body: PropTypes.string.isRequired,
   createdAt: PropTypes.string.isRequired,
-  tag: PropTypes.string.isRequired,
   cardColor: PropTypes.string.isRequired,
-  tagColor: PropTypes.string.isRequired,
 
 };
 

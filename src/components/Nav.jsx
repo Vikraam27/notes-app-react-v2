@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import AppContext from '../context/AppContext';
 
 function Navbar() {
+  const { lang } = useContext(AppContext);
   const showNavbar = () => {
     const menuToggle = document.querySelector('.menu-toggle');
     const navigation = document.querySelector('.navigation');
@@ -24,11 +26,11 @@ function Navbar() {
         Notes
         <span>App</span>
       </Link>
+
       <button type="button" className="menu-toggle" onClick={showNavbar} aria-label="navigation-menu" />
       <ul className="navigation">
-        <li><Link onClick={closeToggle} to="/">Home</Link></li>
-        <li><Link onClick={closeToggle} to="/archived">Archived</Link></li>
-        <li><Link onClick={closeToggle} to="/unarchived">Unarchived</Link></li>
+        <li><Link onClick={closeToggle} to="/">{lang === 'id' ? 'Beranda' : 'Home'}</Link></li>
+        <li><Link onClick={closeToggle} to="/archived">{lang === 'id' ? 'Arsip' : 'Archive'}</Link></li>
       </ul>
     </header>
   );

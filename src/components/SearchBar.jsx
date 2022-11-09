@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { FaSearch } from 'react-icons/fa';
+import AppContext from '../context/AppContext';
 
 function SearchBar({ keyword, keywordChange }) {
+  const { lang } = useContext(AppContext);
   return (
     <form className="search-form">
       <div className="wrap">
@@ -11,7 +13,7 @@ function SearchBar({ keyword, keywordChange }) {
             type="text"
             className="searchTerm"
             id="search"
-            placeholder="Search notes"
+            placeholder={lang === 'id' ? 'Cari note' : 'Search notes'}
             value={keyword}
             onChange={(e) => keywordChange(e.target.value)}
           />
